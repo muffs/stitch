@@ -109,9 +109,7 @@ exports.Package = class Package
               } else if (fn = modules[path] || modules[path = expand(path, './index')]) {
                 module = {id: path, exports: {}};
                 fn(module.exports, function(name) {
-                  console.log("STUBS", stubs);
                   if ( stubs[name] ) {
-                    console.log("FOUND IT!", name);
                     return stubs[name]
                   } else
                     return #{@identifier}(name, dirname(path));
