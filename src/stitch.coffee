@@ -98,6 +98,29 @@ exports.Package = class Package
             }, dirname = function(path) {
               return path.split('/').slice(0, -1).join('/');
             };
+            this.requireAndInject = function(name, root, stubs) {
+              if ( !stubs ) {
+                stubs = root;
+                root = null;
+              }
+              var path = expand(root, name), module = cache[path], ogRequire = require, fn;
+              if (module) {
+                return module.exports;
+              } else if (fn = modules[path] || modules[path = expand(path, './index')]) {
+                module = {id: path, exports: {}};
+                fn(module.exports, function(name) {
+                  console.log("STUBS", stubs);
+                  if ( stubs[name] ) {
+                    console.log("FOUND IT!", name);
+                    return stubs[name]
+                  } else
+                    return #{@identifier}(name, dirname(path));
+                }, module);
+                return module.exports;
+              } else {
+                throw 'module \\'' + name + '\\' not found';
+              }
+            };
             this.#{@identifier} = function(name) {
               return require(name, '');
             }
