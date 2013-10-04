@@ -109,9 +109,9 @@ exports.Package = class Package
               } else if (fn = modules[path] || modules[path = expand(path, './index')]) {
                 module = {id: path, exports: {}};
                 fn(module.exports, function(name) {
-                  if ( stubs[name] ) {
-                    return stubs[name]
-                  } else
+                  if ( stubs[name] )
+                    return stubs[name];
+                  else
                     return #{@identifier}(name, dirname(path));
                 }, module);
                 return module.exports;
